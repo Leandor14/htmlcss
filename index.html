@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Financial Plan</h1>
+
+    <h2>Revenues</h2>
+    <label for="salary">Salary:</label>
+    <input type="number" id="salary" min="0" value="0"><br>
+    <label for="scholarship">Scholarship:</label>
+    <input type="number" id="scholarship" min="0" value="0"><br>
+
+    <h2>Fixed Expenses</h2>
+    <label for="rent">Rent:</label>
+    <input type="number" id="rent" min="0" value="0"><br>
+    <label for="tuition">College Tuition:</label>
+    <input type="number" id="tuition" min="0" value="0"><br>
+    <label for="utility_bills">Utility Bills:</label>
+    <input type="number" id="utility_bills" min="0" value="0"><br>
+
+    <h2>Variable Expenses</h2>
+    <label for="food">Food:</label>
+    <input type="number" id="food" min="0" value="0"><br>
+    <label for="transportation">Transportation:</label>
+    <input type="number" id="transportation" min="0" value="0"><br>
+    <label for="entertainment">Entertainment:</label>
+    <input type="number" id="entertainment" min="0" value="0"><br>
+
+    <h2>Savings</h2>
+    <label for="savings">Savings:</label>
+    <input type="number" id="savings" min="0" value="0"><br>
+
+    <h2>Debts</h2>
+    <table id="debts_table">
+        <tr>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Interest Rate</th>
+        </tr>
+    </table>
+    <button onclick="addDebt()">Add Debt</button>
+
+    <h2>Closing Balance</h2>
+    <p id="closing_balance"></p>
+
+    <script>
+        function addDebt() {
+            var description = prompt("Enter the description of the debt:");
+            var amount = prompt("Enter the amount of the debt:");
+            var interestRate = prompt("Enter the interest rate of the debt:");
+
+            var table = document.getElementById("debts_table");
+            var row = table.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerHTML = description;
+            cell2.innerHTML = amount;
+            cell3.innerHTML = interestRate;
+        }
+
+        function calculateClosingBalance() {
+            var salary = parseFloat(document.getElementById("salary").value);
+            var scholarship = parseFloat(document.getElementById("scholarship").value);
+            var rent = parseFloat(document.getElementById("rent").value);
+            var tuition = parseFloat(document.getElementById("tuition").value);
+            var utilityBills = parseFloat(document.getElementById("utility_bills").value);
+            var food = parseFloat(document.getElementById("food").value);
+            var transportation = parseFloat(document.getElementById("transportation").value);
+            var entertainment = parseFloat(document.getElementById("entertainment").value);
+            var savings = parseFloat(document.getElementById("savings").value);
+
+            var debts = [];
+            var debtsTable = document.getElementById("debts_table");
+            for (var i = 1; i < debtsTable.rows.length; i++) {
+                var row = debtsTable.rows[i];
+                var description = row.cells[0].innerHTML;
+                var amount = parseFloat(row.cells[1].innerHTML);
+                var interestRate = parseFloat(row.cells[2].innerHTML);
+                debts.push({
+                    description: description,
+                    amount: amount,
+                    interestRate: interestRate
+                });
+            }
+
+            var totalIncome = salary + scholarship;
+            var totalFixedExpenses = rent + tuition + utilityBills;
+            var totalVariableExpenses = food + transportation + entertainment;
+            var totalExpenses = totalFixedExpenses + totalVariableExpenses;
+            var totalDebts = 0;
+
+            for (var i = 0; i < debts.length; i++) {
+                totalDebts += debts[i].amount;
+            }
+
+            var closingBalance = totalIncome - totalExpenses - savings - totalDebts;
+
+            document.getElementById("closing_balance").innerHTML = "Closing Balance: $" + closingBalance.toFixed(2);
+        }
+
+        calculateClosingBalance();
+    </script>
+</body>
+</html>
+
